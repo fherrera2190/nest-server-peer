@@ -1,15 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { WebcamWsModule } from './webcam-ws/webcam-ws.module';
 
 @Module({
-  imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-    }),
-  ],
+  imports: [WebcamWsModule],
   controllers: [AppController],
   providers: [AppService],
 })
