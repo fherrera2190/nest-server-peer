@@ -29,10 +29,7 @@ export class WebcamWsGateway
   handleDisconnect(client: any) {
     this.webcamWsService.removeClient(client.id);
 
-    // this.wss.emit(
-    //   'clients-updated',
-    //   this.webcamWsService.getConnectedClients(),
-    // );
+    client.broadcast.emit('client-offline', client.id);
   }
 
   @SubscribeMessage('videoStreamClient')
