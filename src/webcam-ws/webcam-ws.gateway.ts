@@ -18,7 +18,6 @@ export class WebcamWsGateway
   constructor(private readonly webcamWsService: WebcamWsService) {}
   handleConnection(client: Socket, ...args: any[]) {
     this.webcamWsService.registerClient(client);
-
     this.wss.emit(
       'clients-updated',
       this.webcamWsService.getConnectedClients(),
@@ -33,10 +32,8 @@ export class WebcamWsGateway
     );
   }
 
-  @SubscribeMessage('videoStream')
-  handleVideoStream(client: Socket, videoData: any) {
-    // Broadcast video data to all connected clients
-    console.log(client.id);
-    client.broadcast.emit('broadcastVideo', videoData);
+  @SubscribeMessage('videoStreamClient')
+  handleVideoStream(client: Socket, stream: string) {
+    client.broadcast.emit('broadcastVideo', stream);
   }
 }
