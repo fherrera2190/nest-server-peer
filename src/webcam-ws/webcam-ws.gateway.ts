@@ -18,22 +18,26 @@ export class WebcamWsGateway
   constructor(private readonly webcamWsService: WebcamWsService) {}
   handleConnection(client: Socket, ...args: any[]) {
     this.webcamWsService.registerClient(client);
-    this.wss.emit(
-      'clients-updated',
-      this.webcamWsService.getConnectedClients(),
+    client.broadcast.emit('clients-updated', client.id);
+    client.emit(
+      'list-clients',
+      this.webcamWsService
+        .getConnectedClients()
+        .filter((id) => id !== client.id),
     );
   }
   handleDisconnect(client: any) {
     this.webcamWsService.removeClient(client.id);
 
-    this.wss.emit(
-      'clients-updated',
-      this.webcamWsService.getConnectedClients(),
-    );
+    // this.wss.emit(
+    //   'clients-updated',
+    //   this.webcamWsService.getConnectedClients(),
+    // );
   }
 
   @SubscribeMessage('videoStreamClient')
   handleVideoStream(client: Socket, stream: string) {
-    client.broadcast.emit('broadcastVideo', stream);
+    //console.log(client.id);
+    client.broadcast.emit('broadcastVideo', { stream, client: client.id });
   }
 }
