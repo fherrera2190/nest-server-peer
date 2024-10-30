@@ -13,6 +13,7 @@ async function bootstrap() {
   const peerApp = express();
   const portPeer = +process.env.PEER_PORT || 50000;
   const peerServer = peerApp.listen(portPeer);
+  console.log(`Peer Server running on: http://localhost:${portPeer}`);
   const peerExpressServer = ExpressPeerServer(peerServer);
   peerApp.use('/peerjs', peerExpressServer);
 }
