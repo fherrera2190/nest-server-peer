@@ -4,7 +4,10 @@ import { ExpressPeerServer } from 'peer';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: '*', // Permitir todas las solicitudes (puedes especificar dominios)
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
+  });
   const port: number = +process.env.PORT || 51000;
 
   const peerServer = ExpressPeerServer(app.getHttpServer());
